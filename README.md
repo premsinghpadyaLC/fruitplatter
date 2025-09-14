@@ -1,4 +1,4 @@
-# Fresh Fruit Stall — Simple Website
+# Fresh Fruit Platter — Website
 
 ## Files
 - `index.html` — main page
