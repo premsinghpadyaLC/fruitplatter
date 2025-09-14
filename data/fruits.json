@@ -1,0 +1,34 @@
+{
+  "varieties": [
+    {
+      "id": "classic",
+      "name": "Classic Fruit Stall",
+      "image": "variety1.jpg",
+      "fruits": [
+        {"id":"apple","name":"Apple"},
+        {"id":"banana","name":"Banana"},
+        {"id":"orange","name":"Orange"},
+        {"id":"grapes","name":"Grapes"},
+        {"id":"pear","name":"Pear"},
+        {"id":"melon","name":"Melon"},
+        {"id":"peach","name":"Peach"},
+        {"id":"plum","name":"Plum"}
+      ]
+    },
+    {
+      "id": "premium",
+      "name": "Premium Fruit Stall",
+      "image": "variety2.jpg",
+      "fruits": [
+        {"id":"strawberry","name":"Strawberry"},
+        {"id":"kiwi","name":"Kiwi"},
+        {"id":"pineapple","name":"Pineapple"},
+        {"id":"mango","name":"Mango"},
+        {"id":"blueberry","name":"Blueberry"},
+        {"id":"raspberry","name":"Raspberry"},
+        {"id":"dragonfruit","name":"Dragon Fruit"},
+        {"id":"pomegranate","name":"Pomegranate"}
+      ]
+    }
+  ]
+}

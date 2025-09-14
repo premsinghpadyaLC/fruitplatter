@@ -1,0 +1,294 @@
+/* ===== GENERAL RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: #fff8f0;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ===== HEADER HERO ===== */
+.hero {
+  position: relative;
+  background: url('assets/images/hero-bg.jpg') center/cover no-repeat;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+}
+
+.hero .overlay {
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.4);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+}
+
+.hero p {
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+/* ===== MAIN WRAPPER ===== */
+.wrap {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* ===== MULTI-STEP FORM ===== */
+.multi-step-form {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.form-step {
+  display: none;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.form-step.active {
+  display: block;
+}
+
+.form-step h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* ===== ARRANGEMENT TYPE ===== */
+.arr-controls {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.arr-controls label {
+  flex: 1 1 30%;
+  background: #ffe6d9;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.arr-controls input[type="radio"] {
+  display: none;
+}
+
+.arr-controls label:hover {
+  transform: scale(1.05);
+  background: #ffb07c;
+  color: #fff;
+}
+
+.arr-controls input[type="radio"]:checked + label {
+  background: #ff6f3c;
+  color: #fff;
+}
+
+/* Input boxes for attendees/tables/groups */
+.arr-inputs input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.arr-inputs input:focus {
+  border-color: #ff6f3c;
+  outline: none;
+  box-shadow: 0 0 6px rgba(255,111,60,0.4);
+}
+
+/* ===== VARIETY CARDS ===== */
+.var-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+  gap: 20px;
+}
+
+.var-card {
+  background: #fff0e5;
+  padding: 15px;
+  border-radius: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+}
+
+.var-card img {
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.var-card strong {
+  display: block;
+  font-size: 1rem;
+  color: #ff6f3c;
+}
+
+.var-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+/* ===== FRUITS GRID ===== */
+.fruit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  gap: 15px;
+}
+
+.fruit-checkbox {
+  background: #fff3e6;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.fruit-checkbox input {
+  margin-right: 5px;
+}
+
+.fruit-checkbox:hover {
+  background: #ffb07c;
+  color: #fff;
+}
+
+/* ===== INPUT FIELDS ===== */
+input[type="text"], input[type="tel"], input[type="number"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+input:focus {
+  border-color: #ff6f3c;
+  outline: none;
+  box-shadow: 0 0 6px rgba(255,111,60,0.3);
+}
+
+/* ===== BUTTONS ===== */
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #ff6f3c;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #ff895c;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #ff6f3c;
+  border: 2px solid #ff6f3c;
+}
+
+.btn-ghost:hover {
+  background: #ff6f3c;
+  color: #fff;
+}
+
+.btn-success {
+  background: #28a745;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #3ac15b;
+}
+
+/* ===== PREVIEW BOX ===== */
+.preview {
+  background: #fff3e6;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
+
+/* ===== HIDDEN CLASS ===== */
+.hidden {
+  display: none !important;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* ===== MEDIA QUERIES ===== */
+@media (max-width: 768px) {
+  .arr-controls {
+    flex-direction: column;
+  }
+
+  .var-list {
+    grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+  }
+
+  .fruit-grid {
+    grid-template-columns: repeat(auto-fit,minmax(80px,1fr));
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
