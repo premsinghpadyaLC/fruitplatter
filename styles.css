@@ -293,21 +293,43 @@ footer {
   to {opacity:1; transform: translateY(0);}
 }
 
-/* Highlight inputs on focus */
-input:focus, .arr-inputs input:focus, .fruit-checkbox input:focus {
+/* Highlight inputs on focus for all devices */
+input:focus,
+input:focus-visible,
+.arr-inputs input:focus,
+.arr-inputs input:focus-visible,
+.fruit-checkbox input:focus,
+.fruit-checkbox input:focus-visible {
   border-color: #ff6f3c;
   box-shadow: 0 0 8px rgba(255,111,60,0.6);
   transition: all 0.3s ease;
+  outline: none; /* remove default outline */
 }
 
 /* Highlight visible container */
 .highlight {
+  -webkit-animation: highlightFade 1s ease;
   animation: highlightFade 1s ease;
   border: 2px solid #ff6f3c;
   border-radius: 12px;
+}
+
+@-webkit-keyframes highlightFade {
+  0% { -webkit-box-shadow: 0 0 15px rgba(255,111,60,0.8); box-shadow: 0 0 15px rgba(255,111,60,0.8); }
+  100% { -webkit-box-shadow: 0 0 0 rgba(255,111,60,0); box-shadow: 0 0 0 rgba(255,111,60,0); }
 }
 
 @keyframes highlightFade {
   0% { box-shadow: 0 0 15px rgba(255,111,60,0.8); }
   100% { box-shadow: 0 0 0 rgba(255,111,60,0); }
 }
+
+/* Optional: make inputs wider for small screens */
+@media (max-width: 768px) {
+  input, .arr-inputs input, .fruit-checkbox input {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
