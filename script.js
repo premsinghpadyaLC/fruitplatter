@@ -34,12 +34,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     return error;
   }
 
+  // --- Highlight & Focus visible inputs ---
+  function highlightVisibleInput() {
+    const allInputs = document.querySelectorAll('.form-step input:not(.hidden)');
+    allInputs.forEach(input => {
+      input.style.transition = 'all 0.3s ease';
+      input.addEventListener('focus', () => {
+        input.style.boxShadow = '0 0 10px rgba(46,125,50,0.6)';
+        input.style.borderColor = '#2E7D32';
+      });
+      input.addEventListener('blur', () => {
+        input.style.boxShadow = '';
+        input.style.borderColor = '';
+      });
+    });
+  }
+
   // --- Step Navigation ---
   function showStep(step) {
     steps.forEach(s => s.classList.remove('active'));
     const activeStep = document.querySelector(`.form-step[data-step="${step}"]`);
     if (activeStep) activeStep.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Focus first visible input
+    const stepInputs = activeStep.querySelectorAll('input:not(.hidden)');
+    if (stepInputs.length) {
+      stepInputs[0].focus();
+      stepInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   function hideAllArrInputs() {
@@ -52,13 +75,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function toggleArrInput(value) {
     hideAllArrInputs();
-    if (value === 'attendees') attendeesInput.classList.remove('hidden');
-    else if (value === 'tables') {
+    let inputToFocus = null;
+
+    if (value === 'attendees') {
+      attendeesInput.classList.remove('hidden');
+      inputToFocus = attendeesInput;
+    } else if (value === 'tables') {
       tablesInput.classList.remove('hidden');
       tablesPerInput.classList.remove('hidden');
+      inputToFocus = tablesInput;
     } else if (value === 'groups') {
       groupsInput.classList.remove('hidden');
       groupsPerInput.classList.remove('hidden');
+      inputToFocus = groupsInput;
+    }
+
+    highlightVisibleInput();
+    if (inputToFocus) {
+      inputToFocus.focus();
+      inputToFocus.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
@@ -243,119 +278,112 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
   }
 
-// --- PDF Generation ---
-const { jsPDF } = window.jspdf;
+  // --- PDF Generation ---
+  const { jsPDF } = window.jspdf;
 
-async function toDataURL(url) {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function generatePDF(order) {
-  const doc = new jsPDF('p', 'pt', 'a4');
-  const pageWidth = doc.internal.pageSize.width;
-  const margin = 40;
-
-  // Background image (optional)
-  try {
-    const bgImg = await toDataURL('assets/images/pdf-bg.jpg');
-    doc.addImage(bgImg, 'JPEG', 0, 0, pageWidth, doc.internal.pageSize.height);
-  } catch (e) {
-    console.warn('PDF background not found', e);
+  async function toDataURL(url) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 
-  // Header
-  doc.setFillColor(46, 125, 50);
-  doc.rect(0, 0, pageWidth, 70, 'F');
-  doc.setFontSize(22);
-  doc.setTextColor('#FFFFFF');
-  doc.setFont('helvetica', 'bold');
-  doc.text('Fresh Fruit Stall Booking Receipt', pageWidth / 2, 45, { align: 'center' });
+  async function generatePDF(order) {
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 40;
 
-  // Greeting
-  let startY = 100;
-  doc.setFontSize(14);
-  doc.setTextColor('#000000');
-  doc.text(`Dear ${order.name},`, margin, startY);
-  doc.text("Thank you for booking with Fresh Fruit Stall. Below are your order details:", margin, startY + 20);
-
-  // Order Table
-  const tableData = [
-    ['Client Name', order.name],
-    ['Phone Number', order.phone],
-    ['Variety Chosen', order.variety],
-    ['Fruits Selected', order.fruits.join(', ') || 'N/A'],
-    ['Arrangement', order.arrangeValue || 'N/A']
-  ];
-
-  doc.autoTable({
-    startY: startY + 50,
-    head: [['Order Detail', 'Information']],
-    body: tableData,
-    theme: 'grid',
-    styles: { font: 'helvetica', fontSize: 12, cellPadding: 6 },
-    headStyles: { fillColor: [46, 125, 50], textColor: 255, fontStyle: 'bold' },
-    alternateRowStyles: { fillColor: [245, 245, 245] }
-  });
-
-  // Variety Image (optional)
-  if (selectedVariety?.image) {
+    // Background image (optional)
     try {
-      const imgData = await toDataURL(`assets/images/${selectedVariety.image}`);
-      const tableBottom = doc.lastAutoTable.finalY + 20;
-      doc.addImage(imgData, 'JPEG', pageWidth - 220, tableBottom, 160, 120);
-    } catch (e) {
-      console.warn('Variety image error', e);
+      const bgImg = await toDataURL('assets/images/pdf-bg.jpg');
+      doc.addImage(bgImg, 'JPEG', 0, 0, pageWidth, doc.internal.pageSize.height);
+    } catch (e) { console.warn('PDF background not found', e); }
+
+    // Header
+    doc.setFillColor(46, 125, 50);
+    doc.rect(0, 0, pageWidth, 70, 'F');
+    doc.setFontSize(22);
+    doc.setTextColor('#FFFFFF');
+    doc.setFont('helvetica', 'bold');
+    doc.text('Fresh Fruit Platter Booking Receipt', pageWidth / 2, 45, { align: 'center' });
+
+    // Greeting
+    let startY = 100;
+    doc.setFontSize(14);
+    doc.setTextColor('#000000');
+    doc.text(`Dear ${order.name},`, margin, startY);
+    doc.text("Thank you for booking with Fresh Fruit Stall. Below are your order details:", margin, startY + 20);
+
+    // Order Table
+    const tableData = [
+      ['Client Name', order.name],
+      ['Phone Number', order.phone],
+      ['Variety Chosen', order.variety],
+      ['Fruits Selected', order.fruits.join(', ') || 'N/A'],
+      ['Arrangement', order.arrangeValue || 'N/A']
+    ];
+
+    doc.autoTable({
+      startY: startY + 50,
+      head: [['Order Detail', 'Information']],
+      body: tableData,
+      theme: 'grid',
+      styles: { font: 'helvetica', fontSize: 12, cellPadding: 6 },
+      headStyles: { fillColor: [46, 125, 50], textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [245, 245, 245] }
+    });
+
+    // Variety Image (optional)
+    if (selectedVariety?.image) {
+      try {
+        const imgData = await toDataURL(`assets/images/${selectedVariety.image}`);
+        const tableBottom = doc.lastAutoTable.finalY + 20;
+        doc.addImage(imgData, 'JPEG', pageWidth - 220, tableBottom, 160, 120);
+      } catch (e) { console.warn('Variety image error', e); }
     }
+
+    // Footer
+    const afterTable = doc.lastAutoTable.finalY + 160;
+    doc.setFontSize(12);
+    doc.setTextColor('#2E7D32');
+    doc.text("We look forward to delighting you with fresh arranged fruits.", margin, afterTable);
+
+    doc.setFontSize(10);
+    doc.setTextColor('#555555');
+    doc.setFont('helvetica', 'italic');
+    doc.text("Disclaimer: This is a booking receipt only. Please share this pdf with us. Final confirmation will be discussed over call.", margin, afterTable + 30);
+
+    const fileName = `fruit-stall-order-${(order.name || 'guest').replace(/\s+/g, '_')}.pdf`;
+    const pdfBlob = doc.output('blob');
+    const pdfURL = URL.createObjectURL(pdfBlob);
+
+    doc.save(fileName);
+    return { fileName, pdfURL };
   }
 
-  // Footer
-  const afterTable = doc.lastAutoTable.finalY + 160;
-  doc.setFontSize(12);
-  doc.setTextColor('#2E7D32');
-  doc.text("We look forward to delighting you with fresh arranged fruits.", margin, afterTable);
+  // --- Buttons ---
+  document.getElementById('generatePdf').addEventListener('click', async () => {
+    if (!validateStep(currentStep)) return;
+    const order = collectOrder();
+    await generatePDF(order);
+  });
 
-  doc.setFontSize(10);
-  doc.setTextColor('#555555');
-  doc.setFont('helvetica', 'italic');
-  doc.text("Disclaimer: This is a booking receipt only. Please share this pdf with us. Final confirmation will be discussed over call.", margin, afterTable + 30);
+  document.getElementById('whatsappShare').addEventListener('click', async () => {
+    if (!validateStep(currentStep)) return;
+    const order = collectOrder();
+    const { pdfURL } = await generatePDF(order);
 
-  // File Save + Blob
-  const fileName = `fruit-stall-order-${(order.name || 'guest').replace(/\s+/g, '_')}.pdf`;
-  const pdfBlob = doc.output('blob');
-  const pdfURL = URL.createObjectURL(pdfBlob);
-
-  doc.save(fileName);
-  return { fileName, pdfURL };
-}
-
-// --- Buttons ---
-document.getElementById('generatePdf').addEventListener('click', async () => {
-  if (!validateStep(currentStep)) return;
-  const order = collectOrder();
-  await generatePDF(order); // download PDF
-});
-
-document.getElementById('whatsappShare').addEventListener('click', async () => {
-  if (!validateStep(currentStep)) return;
-  const order = collectOrder();
-  const { pdfURL } = await generatePDF(order); // generate PDF blob
-
-  const msg = encodeURIComponent(
+    const msg = encodeURIComponent(
 `Hi, this is ${order.name}.
 Choosen Variety: ${order.variety}
 Required Fruits: ${order.fruits.join(', ')}
-Arrangement: ${order.arrangeValue}
+Arrangement: ${order.arrangeValue}`
+    );
 
-Download your receipt here: ${pdfURL}`
-  );
-
-  window.open(`https://wa.me/+13435587818?text=${msg}`, '_blank');
-});
+    window.open(`https://wa.me/+13435587818?text=${msg}`, '_blank');
+  });
 
 });
