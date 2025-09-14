@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     doc.setFontSize(10);
     doc.setTextColor('#555555');
     doc.setFont('helvetica', 'italic');
-    doc.text("Disclaimer: This is a booking receipt only. Please share this pdf with us. Final confirmation will be discussed over call.", margin, afterTable + 30);
+    doc.text("Disclaimer: This is a booking receipt only. Please share this pdf with us at https://wa.me/+13435587818. Final confirmation will be discussed over call.", margin, afterTable + 30);
 
     const fileName = `fruit-stall-order-${(order.name || 'guest').replace(/\s+/g, '_')}.pdf`;
     const pdfBlob = doc.output('blob');
